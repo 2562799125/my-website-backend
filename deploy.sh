@@ -70,7 +70,8 @@ server {
     listen 80;
     server_name your-domain.com;  # 替换为你的域名或服务器IP
 
-    location / {
+    # 将后端挂载在 /api 前缀，避免与其他后端冲突
+    location /api {
         include proxy_params;
         proxy_pass http://unix:/var/www/myapp/myapp.sock;
     }
@@ -110,3 +111,10 @@ echo "部署完成！"
 echo "应用应该可以通过你的服务器IP或域名访问"
 echo "检查服务状态: sudo systemctl status myapp"
 echo "查看日志: sudo journalctl -u myapp -f"
+
+# 可选：更新流程（保留 uploads 与数据文件）
+echo "如需更新："
+echo "1) cd /var/www && sudo git clone https://github.com/2562799125/my-website-backend.git myapp-tmp || (cd myapp-tmp && sudo git pull)"
+echo "2) sudo rsync -a --delete --exclude 'uploads/' --exclude '*.sqlite' myapp-tmp/ myapp/"
+echo "3) source /var/www/myapp/venv/bin/activate && pip install -r /var/www/myapp/requirements.txt"
+echo "4) sudo systemctl restart myapp && sudo systemctl status myapp --no-pager"
