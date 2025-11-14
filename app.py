@@ -34,7 +34,7 @@ def allowed_file(filename, allowed_set):
 
 @app.route('/api/articles', methods=['GET'])
 def get_articles():
-    # 支持分页：/api/articles?page=1&page_size=20
+    # 支持分页：/api/articles?page=1&page_size=20，返回数组以兼容现有前端
     try:
         page = int(request.args.get('page', 1))
         page_size = int(request.args.get('page_size', 20))
@@ -46,13 +46,11 @@ def get_articles():
     ordered = articles[::-1]
     start = (page - 1) * page_size
     end = start + page_size
-    return jsonify({
-        'success': True,
-        'page': page,
-        'page_size': page_size,
-        'total': len(ordered),
-        'items': ordered[start:end]
-    })
+    resp = jsonify(ordered[start:end])
+    resp.headers['X-Total-Count'] = str(len(ordered))
+    resp.headers['X-Page'] = str(page)
+    resp.headers['X-Page-Size'] = str(page_size)
+    return resp
 
 @app.route('/api/articles', methods=['POST'])
 def add_article():
