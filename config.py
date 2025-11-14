@@ -13,8 +13,8 @@ class Config:
     ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
     ALLOWED_VIDEO_EXTENSIONS = {'mp4', 'mov', 'avi', 'webm'}
     
-    # 数据库配置（可选，如果需要数据库）
-    DATABASE_URL = os.environ.get('DATABASE_URL')
+    # 数据库配置：默认使用项目目录下 SQLite 文件，可通过环境变量覆盖
+    DATABASE_URL = os.environ.get('DATABASE_URL') or 'sqlite:///data.sqlite'
     
     # CORS配置：默认仅允许你的前端域名（可通过环境变量覆盖）
     DEFAULT_CORS = 'https://sicau.hongqiaozhumeng.asia'

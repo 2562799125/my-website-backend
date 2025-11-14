@@ -1,9 +1,14 @@
 import os
+import json
 from flask import Flask, request, jsonify, send_from_directory
 import secrets
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import create_engine, desc
+from sqlalchemy.orm import sessionmaker, scoped_session
 from config import config
+from models import Base, Article, User
 
 def create_app(config_name='production'):
     app = Flask(__name__)
@@ -14,7 +19,7 @@ def create_app(config_name='production'):
     
     # 确保上传目录存在
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    
+
     return app
 
 # 创建应用实例
@@ -25,9 +30,13 @@ UPLOAD_FOLDER = app.config['UPLOAD_FOLDER']
 ALLOWED_IMAGE_EXTENSIONS = app.config['ALLOWED_IMAGE_EXTENSIONS']
 ALLOWED_VIDEO_EXTENSIONS = app.config['ALLOWED_VIDEO_EXTENSIONS']
 
-# 简单内存存储（建议上线用数据库）
-articles = []
-users = {}  # token -> {username, nickname, avatarUrl}
+# 数据库初始化
+engine = create_engine(app.config['DATABASE_URL'], future=True)
+SessionLocal = scoped_session(sessionmaker(bind=engine, autocommit=False, autoflush=False))
+Base.metadata.create_all(bind=engine)
+
+def get_db():
+    return SessionLocal()
 
 def allowed_file(filename, allowed_set):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_set
@@ -42,15 +51,29 @@ def get_articles():
             raise ValueError
     except ValueError:
         return jsonify({'success': False, 'message': 'Invalid pagination params'}), 400
-
-    ordered = articles[::-1]
-    start = (page - 1) * page_size
-    end = start + page_size
-    resp = jsonify(ordered[start:end])
-    resp.headers['X-Total-Count'] = str(len(ordered))
-    resp.headers['X-Page'] = str(page)
-    resp.headers['X-Page-Size'] = str(page_size)
-    return resp
+    db = get_db()
+    try:
+        q = db.query(Article).order_by(desc(Article.created_at))
+        total = q.count()
+        items = q.offset((page - 1) * page_size).limit(page_size).all()
+        result = []
+        for a in items:
+            images = json.loads(a.images) if a.images else []
+            videos = json.loads(a.videos) if a.videos else []
+            result.append({
+                'title': a.title,
+                'content': a.content,
+                'section': a.section,
+                'images': images,
+                'videos': videos
+            })
+        resp = jsonify(result)
+        resp.headers['X-Total-Count'] = str(total)
+        resp.headers['X-Page'] = str(page)
+        resp.headers['X-Page-Size'] = str(page_size)
+        return resp
+    finally:
+        db.close()
 
 @app.route('/api/articles', methods=['POST'])
 def add_article():
@@ -65,16 +88,27 @@ def add_article():
         return jsonify({'success': False, 'message': 'title, content, section are required'}), 400
     if not isinstance(images, list) or not isinstance(videos, list):
         return jsonify({'success': False, 'message': 'images and videos must be arrays'}), 400
-
-    article = {
-        'title': title,
-        'content': content,
-        'section': section,
-        'images': images,
-        'videos': videos
-    }
-    articles.append(article)
-    return jsonify({'success': True, 'article': article}), 201
+    db = get_db()
+    try:
+        a = Article(
+            title=title,
+            content=content,
+            section=section,
+            images=json.dumps(images, ensure_ascii=False),
+            videos=json.dumps(videos, ensure_ascii=False)
+        )
+        db.add(a)
+        db.commit()
+        article = {
+            'title': a.title,
+            'content': a.content,
+            'section': a.section,
+            'images': images,
+            'videos': videos
+        }
+        return jsonify({'success': True, 'article': article}), 201
+    finally:
+        db.close()
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
@@ -113,45 +147,70 @@ def login():
     password = (data.get('password') or '').strip()
     if not username or not password:
         return jsonify({'success': False, 'message': 'username and password required'}), 400
-
-    # 简易登录策略：接受任意用户名密码并签发令牌（生产环境请替换为真实认证）
-    token = secrets.token_hex(16)
-    users[token] = {
-        'username': username,
-        'nickname': username,
-        'avatarUrl': ''
-    }
-    return jsonify({'success': True, 'token': token, 'username': username, 'nickname': username, 'avatarUrl': ''})
+    db = get_db()
+    try:
+        user = db.query(User).filter_by(username=username).first()
+        if user is None:
+            user = User(
+                username=username,
+                password_hash=generate_password_hash(password),
+                nickname=username,
+                avatar_url=''
+            )
+            db.add(user)
+        else:
+            if not check_password_hash(user.password_hash, password):
+                return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+        token = secrets.token_hex(16)
+        user.token = token
+        db.commit()
+        return jsonify({'success': True, 'token': token, 'username': user.username, 'nickname': user.nickname or user.username, 'avatarUrl': user.avatar_url or ''})
+    finally:
+        db.close()
 
 @app.route('/api/userinfo', methods=['GET'])
 def userinfo():
     token = _get_token_from_auth_header()
-    if not token or token not in users:
+    if not token:
         return jsonify({'success': False, 'message': 'Unauthorized'}), 401
-    info = users[token]
-    return jsonify({'success': True, 'username': info['username'], 'nickname': info['nickname'], 'avatarUrl': info['avatarUrl']})
+    db = get_db()
+    try:
+        user = db.query(User).filter_by(token=token).first()
+        if user is None:
+            return jsonify({'success': False, 'message': 'Unauthorized'}), 401
+        return jsonify({'success': True, 'username': user.username, 'nickname': user.nickname or user.username, 'avatarUrl': user.avatar_url or ''})
+    finally:
+        db.close()
 
 @app.route('/api/upload-avatar', methods=['POST'])
 def upload_avatar():
     token = _get_token_from_auth_header()
-    if not token or token not in users:
+    if not token:
         return jsonify({'success': False, 'message': 'Unauthorized'}), 401
-    if 'avatar' not in request.files:
-        return jsonify({'success': False, 'message': 'No avatar part'}), 400
-    file = request.files['avatar']
-    if file.filename == '':
-        return jsonify({'success': False, 'message': 'No selected file'}), 400
+    db = get_db()
+    try:
+        user = db.query(User).filter_by(token=token).first()
+        if user is None:
+            return jsonify({'success': False, 'message': 'Unauthorized'}), 401
+        if 'avatar' not in request.files:
+            return jsonify({'success': False, 'message': 'No avatar part'}), 400
+        file = request.files['avatar']
+        if file.filename == '':
+            return jsonify({'success': False, 'message': 'No selected file'}), 400
 
     # 仅允许图片
-    if not allowed_file(file.filename, ALLOWED_IMAGE_EXTENSIONS):
-        return jsonify({'success': False, 'message': 'Avatar file type not allowed'}), 400
+        if not allowed_file(file.filename, ALLOWED_IMAGE_EXTENSIONS):
+            return jsonify({'success': False, 'message': 'Avatar file type not allowed'}), 400
 
-    filename = secure_filename(file.filename)
-    save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(save_path)
-    file_url = f'/uploads/{filename}'
-    users[token]['avatarUrl'] = file_url
-    return jsonify({'success': True, 'avatarUrl': file_url})
+        filename = secure_filename(file.filename)
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(save_path)
+        file_url = f'/uploads/{filename}'
+        user.avatar_url = file_url
+        db.commit()
+        return jsonify({'success': True, 'avatarUrl': file_url})
+    finally:
+        db.close()
 
 if __name__ == '__main__':
     # 开发环境运行

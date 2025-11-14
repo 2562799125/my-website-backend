@@ -236,3 +236,45 @@ chmod +x deploy.sh
 ```
 
 注意：脚本需要根据实际情况修改配置参数。
+
+## 数据库持久化（SQLite，默认）
+
+- 默认数据库位置：`/var/www/myapp/data.sqlite`（可通过环境变量 `DATABASE_URL` 修改）
+- 备份建议：
+  - 手动备份：`sudo cp /var/www/myapp/data.sqlite /var/backups/myapp-$(date +%F).sqlite`
+  - 定期备份：使用 `cron` 或备份脚本每日复制数据库文件
+- 迁移到 PostgreSQL：
+  - 安装并创建数据库与用户
+  - 设置环境变量：`Environment="DATABASE_URL=postgresql+psycopg2://user:pass@localhost:5432/myapp"`
+  - `sudo systemctl daemon-reload && sudo systemctl restart myapp`
+
+## 多后端共存避免冲突（推荐方案）
+
+通过 Nginx 路由前缀将不同后端隔离，同时每个后端使用独立的 `systemd` 服务与 Unix Socket。
+
+1. 现有后端（本项目）统一挂载在 `/api` 前缀：
+```nginx
+location /api {
+    include proxy_params;
+    proxy_pass http://unix:/var/www/myapp/myapp.sock;
+}
+```
+
+2. 新后端示例（例如另一套接口），挂载在 `/service2` 前缀：
+```nginx
+location /service2 {
+    include proxy_params;
+    proxy_pass http://unix:/var/www/otherapp/otherapp.sock;
+}
+```
+
+3. 对应 `systemd` 服务独立：
+```ini
+[Service]
+WorkingDirectory=/var/www/otherapp
+ExecStart=/var/www/otherapp/venv/bin/gunicorn --workers 2 --bind unix:otherapp.sock -m 007 wsgi:app
+```
+
+这样不同后端的监听“插口”（Unix Socket 或端口）不会冲突，路由前缀也避免路径重叠。
+
+4. 如需独立域名或子域名（例如 `api.example.com` 与 `api2.example.com`），可为每个后端配置独立 `server {}` 块，进一步隔离流量与证书配置。

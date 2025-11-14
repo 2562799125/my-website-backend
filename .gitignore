@@ -1,0 +1,16 @@
+# Python build
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+venv/
+
+# Local databases
+*.sqlite
+
+# Uploads generated at runtime (do not version media)
+uploads/
+
+# OS files
+.DS_Store
