@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "http://47.109.196.237/api/$1" },
+    { "source": "/uploads/(.*)", "destination": "http://47.109.196.237/uploads/$1" },
+    { "source": "/(.*)", "destination": "/static/$1" }
+  ]
+}
