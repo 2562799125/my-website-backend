@@ -1,0 +1,20 @@
+<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- 圆形背景 -->
+  <circle cx="20" cy="20" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- 山峰图案 -->
+  <path d="M8 25 L14 15 L20 20 L26 12 L32 25 Z" fill="#81C784" opacity="0.8"/>
+  <path d="M6 27 L12 18 L18 22 L24 16 L30 27 Z" fill="#A5D6A7" opacity="0.6"/>
+  
+  <!-- 弧形装饰线 -->
+  <path d="M4 20 Q20 8 36 20" stroke="#66BB6A" stroke-width="2" fill="none" opacity="0.7"/>
+  <path d="M6 24 Q20 14 34 24" stroke="#81C784" stroke-width="1.5" fill="none" opacity="0.5"/>
+  
+  <!-- 文字部分 -->
+  <text x="45" y="16" font-family="serif" font-size="14" font-weight="bold" fill="#8BC34A">
+    <tspan>圆璞</tspan>
+  </text>
+  <text x="45" y="30" font-family="serif" font-size="14" font-weight="bold" fill="#689F38">
+    <tspan>提效</tspan>
+  </text>
+</svg>

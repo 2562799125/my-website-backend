@@ -1,0 +1,13 @@
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="grassPattern" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#4a7c59"/>
+      <circle cx="8" cy="8" r="2" fill="#6b8e23"/>
+      <circle cx="24" cy="16" r="1.5" fill="#228b22"/>
+      <circle cx="16" cy="24" r="2.5" fill="#32cd32"/>
+      <circle cx="4" cy="20" r="1" fill="#90ee90"/>
+      <circle cx="28" cy="6" r="1.8" fill="#9acd32"/>
+    </pattern>
+  </defs>
+  <rect width="256" height="256" fill="url(#grassPattern)"/>
+</svg>

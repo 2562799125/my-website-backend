@@ -1,0 +1,544 @@
+/* 仪表板网格布局 */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* 概览统计卡片 */
+.overview-stats {
+    grid-column: span 2;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: scale(1.05);
+}
+
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* 生产图表 */
+.production-chart {
+    grid-column: span 2;
+    min-height: 300px;
+}
+
+.production-chart canvas {
+    max-height: 250px;
+}
+
+/* 安全状态 */
+.safety-status {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.safety-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.indicator-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+.indicator.warning .indicator-dot {
+    background: #FF9800;
+}
+
+.indicator.danger .indicator-dot {
+    background: #f44336;
+}
+
+/* 最新警报 */
+.recent-alerts {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+    transition: all 0.3s ease;
+}
+
+.alert-item:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+}
+
+.alert-item.warning {
+    border-left-color: #FF9800;
+}
+
+.alert-item.danger {
+    border-left-color: #f44336;
+}
+
+.alert-time {
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 50px;
+}
+
+.alert-message {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+/* 监控网格 */
+.monitoring-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+/* 传感器数据 */
+.sensor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.sensor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.sensor-item:hover {
+    transform: translateY(-3px);
+}
+
+.sensor-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.sensor-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.sensor-status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.sensor-status.normal {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+}
+
+.sensor-status.warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #FF9800;
+}
+
+.sensor-status.danger {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+/* 实时图表 */
+.real-time-chart {
+    grid-column: span 2;
+    min-height: 300px;
+}
+
+.real-time-chart canvas {
+    max-height: 250px;
+}
+
+/* 设备状态网格 */
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.equipment-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    border-left: 4px solid #4CAF50;
+}
+
+.equipment-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.equipment-item.online {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    border-left-color: #4CAF50;
+}
+
+.equipment-item.warning {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    border-left-color: #FF9800;
+}
+
+.equipment-item.offline {
+    background: linear-gradient(135deg, #ffeaea 0%, #ffb3b3 100%);
+    border-left-color: #f44336;
+}
+
+.equipment-icon {
+    font-size: 2rem;
+}
+
+.equipment-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.equipment-name {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.2rem;
+}
+
+.equipment-status {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* 设备管理表格 */
+.equipment-table {
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.equipment-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    padding: 1rem 0.75rem;
+}
+
+.equipment-table td {
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.equipment-table tr:nth-child(even) {
+    background: rgba(76, 175, 80, 0.05);
+}
+
+.equipment-table tr:hover {
+    background: rgba(76, 175, 80, 0.1);
+    transform: scale(1.01);
+}
+
+/* 安全仪表板 */
+.safety-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+/* 警报统计 */
+.alert-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.alert-stat {
+    text-align: center;
+    padding: 1rem;
+    border-radius: 10px;
+    color: white;
+    min-width: 80px;
+    transition: transform 0.3s ease;
+}
+
+.alert-stat:hover {
+    transform: scale(1.1);
+}
+
+.alert-stat.critical {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+}
+
+.alert-stat.warning {
+    background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+}
+
+.alert-stat.info {
+    background: linear-gradient(135deg, #48cae4 0%, #023e8a 100%);
+}
+
+.alert-stat .count {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.alert-stat .label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* 警报时间线 */
+.alert-timeline {
+    grid-column: span 2;
+}
+
+.timeline {
+    margin-top: 1rem;
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #4CAF50, #2196F3, #FF9800, #f44336);
+}
+
+.timeline-item {
+    display: flex;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 10px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #4CAF50;
+    border: 3px solid white;
+    box-shadow: 0 0 0 3px #4CAF50;
+}
+
+.timeline-item.warning::before {
+    background: #FF9800;
+    box-shadow: 0 0 0 3px #FF9800;
+}
+
+.timeline-item.critical::before {
+    background: #f44336;
+    box-shadow: 0 0 0 3px #f44336;
+}
+
+.timeline-time {
+    min-width: 60px;
+    font-weight: bold;
+    color: #666;
+    margin-right: 1rem;
+}
+
+.timeline-content {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-left: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateX(10px);
+}
+
+.timeline-content h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.timeline-content p {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* 报表仪表板 */
+.reports-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+/* 报表筛选 */
+.filter-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-controls select,
+.filter-controls input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.filter-controls select:focus,
+.filter-controls input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+/* 报表图表 */
+.report-chart {
+    grid-column: span 2;
+    min-height: 400px;
+}
+
+.report-chart canvas {
+    max-height: 350px;
+}
+
+/* 统计摘要 */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.summary-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.summary-item:hover {
+    transform: translateY(-5px);
+}
+
+.summary-label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.summary-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .dashboard-grid,
+    .monitoring-grid,
+    .safety-dashboard,
+    .reports-dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .overview-stats,
+    .production-chart,
+    .real-time-chart,
+    .alert-timeline,
+    .report-chart {
+        grid-column: span 1;
+    }
+    
+    .stats-grid,
+    .equipment-grid,
+    .summary-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+    }
+    
+    .timeline-content {
+        margin-left: 1rem;
+    }
+}

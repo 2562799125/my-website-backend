@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# 矿山可视化监管平台 macOS 应用启动器
+# Mine Visualization Monitoring Platform macOS App Launcher
+
+# 获取应用包路径
+APP_DIR="$(dirname "$(dirname "$(dirname "$0")")")"
+RESOURCES_DIR="$APP_DIR/Contents/Resources"
+
+# 切换到资源目录
+cd "$RESOURCES_DIR"
+
+# 检查Python是否可用
+if ! command -v python3 &> /dev/null; then
+    osascript -e 'display dialog "错误: 未找到Python3\n\n请安装Python3后重试。" buttons {"确定"} default button "确定" with icon stop with title "矿山可视化监管平台"'
+    exit 1
+fi
+
+# 启动应用
+python3 app_launcher.py

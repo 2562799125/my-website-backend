@@ -1,0 +1,2199 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 地图缩放控制按钮 */
+.map-zoom-controls {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    z-index: 1200 !important;
+    pointer-events: auto !important;
+}
+
+.zoom-control-btn {
+    width: 40px !important;
+    height: 40px !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    border: 1px solid rgba(245, 196, 90, 0.6) !important;
+    border-radius: 8px !important;
+    color: #f5c45a !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    backdrop-filter: blur(8px) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.zoom-control-btn:hover {
+    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+    transform: translateY(-2px);
+    border-color: #ffffff;
+}
+
+.zoom-control-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.zoom-control-btn svg {
+    transition: all 0.3s ease;
+}
+
+.zoom-control-btn:hover svg {
+    transform: scale(1.1);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .map-zoom-controls {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .zoom-control-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .zoom-control-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+body {
+    font-family: 'Microsoft YaHei', 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+    color: #ffffff;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* 顶部标题栏 - 基础布局样式 */
+.main-header {
+    background: transparent !important; 
+    backdrop-filter: none !important; 
+    border-bottom: 1px solid rgba(245, 196, 90, 0.6) !important;
+    box-shadow: none;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    position: relative;
+    z-index: 1000 !important;
+    pointer-events: auto; /* 确保标题栏可交互 */
+    /* 背景和颜色样式在文件末尾的金色主题中定义 */
+}
+
+.main-header::before {
+    display: none !important;
+}
+
+.header-left .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-svg {
+    height: 40px;
+    width: auto;
+    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6));
+    transition: all 0.3s ease;
+}
+
+.logo-svg:hover {
+    filter: drop-shadow(0 0 12px rgba(76, 175, 80, 0.8));
+    transform: scale(1.05);
+}
+
+/* 保留原有样式以防其他地方使用 */
+.logo-icon {
+    font-size: 24px;
+    color: #00d4ff;
+}
+
+.logo-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #00d4ff;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.header-center {
+    text-align: center;
+    position: relative;
+    z-index: 1000;
+}
+
+/* 标题容器 */
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 8px;
+    animation: titleSlideIn 1.5s ease-out;
+    z-index: 1001;
+}
+
+/* 标题入场动画 */
+@keyframes titleSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(-10px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 标题装饰线 */
+.title-decoration-left,
+.title-decoration-right {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #F5C45A, #FFD700);
+    position: relative;
+    margin: 0 20px;
+    animation: decorationGlow 2s ease-in-out infinite alternate;
+}
+
+/* 装饰线发光动画 */
+@keyframes decorationGlow {
+    0% {
+        box-shadow: 0 0 5px rgba(245, 196, 90, 0.5);
+        transform: scaleX(1);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(245, 196, 90, 0.8), 0 0 25px rgba(255, 215, 0, 0.4);
+        transform: scaleX(1.1);
+    }
+}
+
+.title-decoration-left::before,
+.title-decoration-right::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, transparent, rgba(245, 196, 90, 0.3), rgba(255, 215, 0, 0.3));
+    filter: blur(2px);
+}
+
+.title-decoration-right {
+    background: linear-gradient(90deg, #FFD700, #F5C45A, transparent);
+}
+
+.title-decoration-right::before {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), rgba(245, 196, 90, 0.3), transparent);
+}
+
+/* 主标题样式 */
+.main-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    z-index: 1002;
+}
+
+.title-prefix {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: #00d4ff;
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+    margin-bottom: -2px;
+    animation: glow-blue 2s ease-in-out infinite alternate, prefixFloat 4s ease-in-out infinite;
+}
+
+.title-main {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #FFD700; /* 备用颜色 */
+    background: linear-gradient(135deg, #F5C45A, #FFD700, #FFF700, #F5C45A);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 2s ease-in-out infinite, titlePulse 3s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(245, 196, 90, 0.8);
+    margin: 2px 0;
+    position: relative;
+    display: block; /* 确保显示 */
+}
+
+.title-suffix {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    margin-top: -2px;
+    animation: suffixGlow 3s ease-in-out infinite alternate;
+}
+
+.title-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #888;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+/* 动画效果 */
+@keyframes glow-blue {
+    from { 
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+        transform: scale(1);
+    }
+    to { 
+        text-shadow: 0 0 20px rgba(0, 212, 255, 1), 0 0 30px rgba(0, 212, 255, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 200% 50%; }
+    75% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes titlePulse {
+    0%, 100% { 
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        transform: scale(1.02);
+        filter: brightness(1.1);
+    }
+}
+
+@keyframes prefixFloat {
+    0%, 100% { 
+        transform: translateY(0px);
+    }
+    50% { 
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes suffixGlow {
+    0% { 
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+        opacity: 0.9;
+    }
+    100% { 
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.5);
+        opacity: 1;
+    }
+}
+
+/* 时间显示区域 */
+.datetime {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: 14px;
+    color: #00d4ff;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.datetime-label {
+    font-size: 12px;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.status-indicator {
+    color: #00ff88;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.weather-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #00d4ff;
+}
+
+.user-info {
+    color: #ffffff;
+    font-size: 14px;
+}
+
+/* 全屏按钮样式 */
+.fullscreen-btn {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1001;
+}
+
+.fullscreen-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.2));
+    border-color: rgba(0, 212, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.fullscreen-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+}
+
+.fullscreen-icon {
+    font-size: 16px;
+    color: #00d4ff;
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.fullscreen-btn:hover .fullscreen-icon {
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(0, 212, 255, 0.8);
+    transform: scale(1.1);
+}
+
+/* 主容器布局 */
+.main-container {
+    display: grid;
+    grid-template-columns: 300px 1fr 350px;
+    grid-template-rows: 1fr;
+    height: calc(100vh - 80px - 80px); /* 减去头部80px和底部按钮区域80px */
+    gap: 2px;
+    padding: 2px;
+    position: relative;
+    z-index: 10;
+    pointer-events: none; /* 让主容器不阻挡地图交互 */
+}
+
+/* 左侧面板 */
+.left-panel {
+    background: var(--dark-bg) !important; 
+    backdrop-filter: blur(8px) !important; 
+    border: 1px solid rgba(245, 196, 90, 0.6) !important;
+    box-shadow: inset 0 0 0 1px rgba(245,196,90,0.15), 0 10px 30px rgba(0,0,0,0.35);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto; /* 恢复面板交互 */
+}
+
+/* 右侧面板 - 与左侧面板完全一致 */
+.right-panel {
+    background: var(--dark-bg) !important; 
+    backdrop-filter: blur(8px) !important; 
+    border: 1px solid rgba(245, 196, 90, 0.6) !important;
+    box-shadow: inset 0 0 0 1px rgba(245,196,90,0.15), 0 10px 30px rgba(0,0,0,0.35);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto; /* 恢复面板交互 */
+}
+
+.panel-section {
+    margin-bottom: 25px;
+}
+
+.section-title {
+    font-size: 16px;
+    color: #00d4ff;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* 矿山选择器 */
+.mine-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mine-select {
+    padding: 10px 15px;
+    background: linear-gradient(90deg, #1a2332 0%, #2a3442 100%);
+    border: 1px solid #00d4ff;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mine-select:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    border-color: #00d4ff;
+}
+
+.mine-select option {
+    background: #1a2332;
+    color: #ffffff;
+    padding: 8px;
+}
+
+.mine-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(26, 35, 50, 0.5);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.mine-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.detail-label {
+    color: #00d4ff;
+    font-weight: 500;
+}
+
+.detail-value {
+    color: #ffffff;
+    font-weight: 400;
+}
+
+/* 控制按钮 */
+.control-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.control-btn {
+    padding: 10px 15px;
+    background: linear-gradient(90deg, #1a2332 0%, #2a3442 100%);
+    border: 1px solid #00d4ff;
+    border-radius: 6px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.control-btn:hover {
+    background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    transform: translateX(5px);
+}
+
+.control-btn.active {
+    background: linear-gradient(90deg, #00d4ff 0%, #0099cc 100%);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+}
+
+/* 人员信息 */
+.personnel-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.personnel-avatar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+}
+
+.avatar-icon {
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.personnel-name {
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.personnel-status.online {
+    color: #00ff88;
+    font-size: 12px;
+}
+
+.personnel-stats .stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.stat-label {
+    color: #cccccc;
+    font-size: 14px;
+}
+
+.stat-value {
+    color: #00d4ff;
+    font-weight: bold;
+}
+
+/* 监控数据 */
+.monitoring-data {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.monitor-item {
+    background: rgba(0, 212, 255, 0.1);
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.monitor-label {
+    font-size: 14px;
+    color: #cccccc;
+    margin-bottom: 5px;
+}
+
+.monitor-value {
+    font-size: 18px;
+    color: #00d4ff;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.monitor-bar {
+    height: 6px;
+    background: rgba(0, 212, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.monitor-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #00ff88);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* 圆形进度条 */
+.circular-progress-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.circular-progress {
+    text-align: center;
+}
+
+.progress-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(#00d4ff 0deg, #00d4ff var(--percent, 85%), rgba(0, 212, 255, 0.2) var(--percent, 85%), rgba(0, 212, 255, 0.2) 360deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+.progress-circle::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #0f1419;
+}
+
+.progress-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #00d4ff;
+    z-index: 1;
+}
+
+.progress-label {
+    font-size: 10px;
+    color: #cccccc;
+    margin-top: 5px;
+    z-index: 1;
+}
+
+/* 中央面板 */
+.center-panel {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: none !important;
+}
+
+.map-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+}
+
+.amap-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.content-container {
+
+.map-overlay {
+    position: absolute;
+    z-index: 2 !important;
+}
+
+.main-header,
+.main-container,
+.left-panel,
+.center-panel,
+.right-panel,
+.bottom-panel,
+footer {
+    position: relative;
+    z-index: 1 !important;
+}
+.map-header {
+    height: 50px;
+    background: linear-gradient(90deg, #1a2332 0%, #2a3442 100%);
+    border-bottom: 1px solid #00d4ff;
+    display: flex; /* 保持头部可见，控件浮动到右上 */
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.map-controls {
+    display: flex;
+    gap: 10px;
+    position: fixed; /* 固定到页面右上角 */
+    top: 16px;
+    right: 20px;
+    z-index: 1000;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
+}
+
+.map-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+}
+
+.map-btn:hover,
+.map-btn.active {
+    background: #00d4ff;
+    color: #0f1419;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.map-tools {
+    display: flex;
+    gap: 8px;
+}
+
+.tool-btn {
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    color: #00d4ff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.tool-btn:hover {
+    background: #00d4ff;
+    color: #0f1419;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* 高德2D地图容器 */
+.amap-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+}
+
+/* 高德地图覆盖小地图与标注层时，维持 overlay 层在上方 */
+.map-overlay { z-index: 2; }
+.amap-container { z-index: 1; }
+
+.map-marker {
+    position: absolute;
+    pointer-events: auto;
+}
+
+.marker-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+    animation: pulse 2s infinite;
+}
+
+.marker-label {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 212, 255, 0.9);
+    color: #0f1419;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* 隐藏式地图切换按钮样式 */
+.map-toggle-container {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 1500;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.map-toggle-trigger {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, rgba(218, 165, 32, 0.9), rgba(255, 215, 0, 0.9));
+    border: 2px solid rgba(218, 165, 32, 0.8);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(218, 165, 32, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.map-toggle-trigger::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.map-toggle-trigger:hover::before {
+    opacity: 1;
+}
+
+.map-toggle-trigger:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(218, 165, 32, 0.5);
+    border-color: rgba(255, 215, 0, 1);
+}
+
+.map-toggle-icon {
+    font-size: 20px;
+    color: #0f1419;
+    transition: transform 0.3s ease;
+}
+
+.map-toggle-trigger:hover .map-toggle-icon {
+    transform: rotate(180deg);
+}
+
+.map-toggle-options {
+    margin-top: 10px;
+    background: rgba(15, 20, 25, 0.95);
+    border: 1px solid rgba(218, 165, 32, 0.5);
+    border-radius: 12px;
+    padding: 8px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 140px;
+}
+
+.map-toggle-container.expanded .map-toggle-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.map-toggle-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    margin: 2px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.map-toggle-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(218, 165, 32, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.map-toggle-option:hover::before {
+    left: 100%;
+}
+
+.map-toggle-option:hover {
+    background: rgba(218, 165, 32, 0.2);
+    color: rgba(218, 165, 32, 1);
+    transform: translateX(5px);
+}
+
+.map-toggle-option.active {
+    background: rgba(218, 165, 32, 0.3);
+    color: rgba(218, 165, 32, 1);
+    border: 1px solid rgba(218, 165, 32, 0.5);
+}
+
+.map-toggle-option-icon {
+    margin-right: 8px;
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .map-toggle-container {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .map-toggle-trigger {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .map-toggle-icon {
+        font-size: 18px;
+    }
+    
+    .map-toggle-options {
+        min-width: 120px;
+    }
+    
+    .map-toggle-option {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+}
+
+/* 小地图 */
+.minimap {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    width: 150px;
+    height: 100px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid #00d4ff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.minimap-content {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #0f1419 25%, transparent 25%), 
+                linear-gradient(-45deg, #0f1419 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #0f1419 75%), 
+                linear-gradient(-45deg, transparent 75%, #0f1419 75%);
+    background-size: 10px 10px;
+    background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+
+.minimap-view {
+    width: 30px;
+    height: 20px;
+    border: 2px solid #00d4ff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 212, 255, 0.2);
+}
+
+/* 右侧面板 */
+.right-panel {
+    background: linear-gradient(180deg, #0f1419 0%, #1a1f3a 100%);
+    border: 1px solid #00d4ff;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+/* 设备列表 */
+.equipment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.equipment-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.equipment-item:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.equipment-icon {
+    font-size: 24px;
+    width: 40px;
+    text-align: center;
+}
+
+.equipment-info {
+    flex: 1;
+}
+
+.equipment-name {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.equipment-status {
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.equipment-status.running {
+    background: #00ff88;
+    color: #0f1419;
+}
+
+
+
+.equipment-status.maintenance {
+    background: #ff4444;
+    color: #ffffff;
+}
+
+.equipment-value {
+    font-size: 16px;
+    color: #00d4ff;
+    font-weight: bold;
+}
+
+/* 图表容器 */
+.chart-container {
+    height: 200px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: 10px;
+}
+
+
+
+/* 底部面板 */
+.bottom-panel {
+    height: 200px;
+    background: transparent !important;
+    border: 1px solid #00d4ff;
+    border-radius: 8px;
+    margin: 2px;
+    padding: 20px;
+    box-shadow: none !important;
+}
+
+.data-section {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    height: 100%;
+}
+
+.chart-section,
+.trend-section {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.chart-title,
+.table-title,
+.trend-title {
+    font-size: 14px;
+    color: #00d4ff;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* 数据表格 */
+.table-section {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: 15px;
+    overflow: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+/* 生态指标状态样式 */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    min-width: 50px;
+}
+
+.status-badge.good {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.status-badge.normal {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196F3;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.status-badge.warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #FF9800;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.status-badge.danger {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* 趋势图标样式 */
+.trend-icon {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.trend-icon.up {
+    color: #4CAF50;
+}
+
+.trend-icon.down {
+    color: #f44336;
+}
+
+.trend-icon.stable {
+    color: #FF9800;
+}
+
+.data-table th,
+.data-table td {
+    padding: 6px 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.data-table th {
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+    font-weight: bold;
+}
+
+.data-table td {
+    color: #ffffff;
+}
+
+.data-table .status {
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+}
+
+.data-table .status.running {
+    background: #00ff88;
+    color: #0f1419;
+}
+
+
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(0, 162, 255, 0.8);
+    }
+}
+
+/* 应用动画 */
+.panel {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.left-panel {
+    animation: slideInLeft 0.8s ease-out;
+}
+
+.right-panel {
+    animation: slideInRight 0.8s ease-out;
+}
+
+.control-btn:hover {
+    animation: glow 1s infinite;
+}
+
+.equipment-status.running {
+    animation: pulse 2s infinite;
+}
+
+.monitor-progress {
+    transition: width 0.8s ease-out;
+}
+
+.chart-container {
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 1400px) {
+    .main-container {
+        grid-template-columns: 280px 1fr 320px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .main-container {
+        grid-template-columns: 250px 1fr 280px;
+    }
+    
+    .main-title {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 992px) {
+    .main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 10px;
+        height: auto;
+    }
+    
+    .left-panel, .right-panel {
+        height: 300px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .center-panel {
+        height: 400px;
+        order: 1;
+    }
+    
+    .bottom-panel {
+        order: 3;
+    }
+    
+    .data-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-header {
+        padding: 10px 15px;
+        flex-direction: column;
+        gap: 10px;
+        height: auto;
+    }
+    
+    .main-title {
+        font-size: 20px;
+    }
+    
+    .header-right {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .left-panel, .right-panel {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    
+    .bottom-panel {
+        padding: 10px;
+    }
+    
+    .data-section {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 18px;
+    }
+    
+    .control-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .circular-progress-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00d4ff;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0099cc;
+}
+/* 高德地图默认元素移动到侧边并弱化显示 */
+#amap-container .amap-logo,
+#amap-container .amap-copyright,
+.amap-container .amap-logo,
+.amap-container .amap-copyright {
+    position: absolute !important;
+    bottom: 8px;
+    left: 8px;
+    opacity: 0.25;
+    filter: grayscale(80%);
+    transition: opacity 0.2s ease;
+    z-index: 2;
+}
+#amap-container .amap-logo:hover,
+#amap-container .amap-copyright:hover,
+.amap-container .amap-logo:hover,
+.amap-container .amap-copyright:hover {
+    opacity: 0.6;
+}
+
+/* 将高德地图默认工具控件移到侧边弱化显示（如工具条、控制栏、地图类型切换等） */
+#amap-container .amap-toolbar,
+#amap-container .amap-controlbar,
+#amap-container .amap-maptype,
+.amap-container .amap-toolbar,
+.amap-container .amap-controlbar,
+.amap-container .amap-maptype {
+    position: absolute !important;
+    left: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+    opacity: 0.35;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 3;
+}
+#amap-container .amap-toolbar:hover,
+#amap-container .amap-controlbar:hover,
+#amap-container .amap-maptype:hover,
+.amap-container .amap-toolbar:hover,
+.amap-container .amap-controlbar:hover,
+.amap-container .amap-maptype:hover {
+    opacity: 0.8;
+}
+/* 高德地图设置按钮容器 */
+.api-setup-container {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 1000 !important;
+    width: 220px;
+    height: 60px;
+}
+
+/* 悬停触发区域 */
+.api-setup-trigger {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 60px;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* 悬停提示指示器 */
+.api-setup-trigger::after {
+    content: '⚙️';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.api-setup-container:hover .api-setup-trigger::after {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.8);
+}
+
+/* 高德地图设置按钮 */
+#api-setup-btn {
+    position: absolute !important;
+    top: 50% !important;
+    right: 0 !important;
+    transform: translateY(-50%) translateX(100%) !important;
+    padding: 10px 15px !important;
+    background: linear-gradient(135deg, #00A0E9, #0080c7) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    box-shadow: 0 4px 15px rgba(0, 160, 233, 0.3) !important;
+    white-space: nowrap !important;
+    
+    /* 默认隐藏状态 */
+    opacity: 0 !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    pointer-events: none !important;
+}
+
+/* 悬停时显示按钮 */
+.api-setup-container:hover #api-setup-btn {
+    opacity: 1 !important;
+    transform: translateY(-50%) translateX(0) !important;
+    pointer-events: auto !important;
+}
+
+/* 按钮本身的悬停效果 */
+#api-setup-btn:hover {
+    background: linear-gradient(135deg, #0080c7, #006ba3) !important;
+    box-shadow: 0 6px 20px rgba(0, 160, 233, 0.5) !important;
+    transform: translateY(-50%) translateX(0) scale(1.05) !important;
+}
+
+/* 按钮激活效果 */
+#api-setup-btn:active {
+    transform: translateY(-50%) translateX(0) scale(0.98) !important;
+    box-shadow: 0 2px 10px rgba(0, 160, 233, 0.4) !important;
+}
+
+/* 隐藏API提示 */
+#api-prompt {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* 完全隐藏高德默认控件（工具条、控制栏、地图类型切换等） */
+#amap-container .amap-toolbar,
+#amap-container .amap-controlbar,
+#amap-container .amap-maptype,
+.amap-container .amap-toolbar,
+.amap-container .amap-controlbar,
+.amap-container .amap-maptype {
+    display: none !important;
+}
+
+/* 将主要UI层级置于地图之上，确保地图在最底层 */
+.map-container,
+.amap-container,
+#amap-container,
+#amap-container .amap-logo,
+#amap-container .amap-copyright,
+#amap-container .amap-toolbar,
+#amap-container .amap-controlbar,
+#amap-container .amap-maptype,
+.amap-container .amap-logo,
+.amap-container .amap-copyright,
+.amap-container .amap-toolbar,
+.amap-container .amap-controlbar,
+.amap-container .amap-maptype {
+    z-index: 0 !important;
+    /* 移除 position: fixed，让地图容器保持在其父容器内 */
+}
+
+/* 所有主要内容层级提升 */
+.main-header,
+.main-container,
+.left-panel,
+.center-panel,
+.right-panel,
+.bottom-panel,
+footer,
+.panel-section,
+.map-mine-info {
+    position: relative !important;
+    z-index: 100 !important;
+}
+.left-panel,
+.right-panel,
+.center-panel,
+.bottom-panel,
+.panel-section {
+    backdrop-filter: blur(6px);
+    background: rgba(15, 20, 25, 0.45);
+}
+/* 注释掉橙黄色主题，避免与金色主题冲突 */
+/*
+:root { --accent-orange: #FFA500; }
+body { color: var(--accent-orange); }
+
+.main-header,
+.left-panel,
+.right-panel,
+.center-panel,
+.bottom-panel,
+.panel-section {
+    background: transparent !important;
+    backdrop-filter: none !important;
+}
+
+.main-header,
+.left-panel,
+.right-panel,
+.center-panel,
+.bottom-panel,
+.panel-section {
+    color: var(--accent-orange) !important;
+}
+*/
+
+/* 注释掉橙黄色文字元素样式，使用金色主题 */
+/*
+.header-left .logo-text,
+.main-title,
+.section-title,
+.datetime,
+.weather-info,
+.user-info,
+.map-btn,
+.tool-btn,
+.equipment-name,
+.equipment-value,
+.alert-title,
+.alert-time,
+.chart-title,
+.trend-title,
+.data-table th,
+.data-table td {
+    color: var(--accent-orange) !important;
+}
+*/
+/* 参考图主题变量 */
+:root {
+  --gold-1: #D8A33A;
+  --gold-2: #F5C45A;
+  --gold-3: #FFDD86;
+  --dark-bg: rgba(12, 12, 12, 0.55);
+  --dark-bg-strong: rgba(8, 8, 8, 0.7);
+  --text-gold: #F5C45A;
+}
+
+/* 顶部标题栏 - 透明背景 + 金色下划线 */
+.main-header {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+  border-bottom: 3px solid var(--gold-2) !important;
+  z-index: 1000 !important;
+}
+/* 金色主题下的标题样式 */
+.main-title .title-main { 
+    color: #FFD700 !important; /* 备用颜色 */
+    background: linear-gradient(135deg, #F5C45A, #FFD700, #FFF700, #F5C45A) !important;
+    background-size: 300% 300% !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: 0 0 20px rgba(245, 196, 90, 0.8) !important;
+    display: block !important; /* 确保显示 */
+    animation: gradient-shift 2s ease-in-out infinite, titlePulse 3s ease-in-out infinite !important;
+}
+.main-title .title-prefix { 
+    color: #00d4ff !important; 
+    text-shadow: 0 0 12px rgba(0, 212, 255, 0.8) !important; 
+}
+.main-title .title-suffix { 
+    color: #ffffff !important; 
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6) !important; 
+}
+.datetime, .weather-info, .user-info { color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+/* 左右面板：透明背景 + 金色描边 */
+.left-panel, .right-panel { 
+  background: transparent !important; 
+  backdrop-filter: none !important; 
+  border: 1px solid rgba(245, 196, 90, 0.6) !important;
+  box-shadow: none !important;
+  border-radius: 8px;
+  padding: 20px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1 !important;
+  pointer-events: auto;
+}
+.section-title {
+  color: var(--text-gold) !important;
+  border-left: 4px solid var(--gold-2);
+  padding-left: 10px;
+  text-shadow: 0 0 8px rgba(245,196,90,0.35);
+}
+.panel-section { 
+  background: transparent !important; 
+  border: 1px solid rgba(245, 196, 90, 0.35) !important; 
+  backdrop-filter: none !important; 
+}
+
+/* 中央面板置顶，地图底层已在前面设置 */
+.center-panel { z-index: 1; }
+
+/* 新增内容样式 */
+/* 图表容器 */
+.chart-container {
+  background: transparent !important;
+  border: 1px solid rgba(245, 196, 90, 0.4) !important;
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 10px;
+  backdrop-filter: none !important;
+}
+
+/* 紧凑数据表格 */
+.compact-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent !important;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.compact-data-table th {
+  background: rgba(245, 196, 90, 0.2) !important;
+  color: var(--text-gold) !important;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid rgba(245, 196, 90, 0.3);
+}
+
+.compact-data-table td {
+  padding: 6px;
+  font-size: 11px;
+  color: #e0e0e0 !important;
+  border-bottom: 1px solid rgba(245, 196, 90, 0.15);
+}
+
+.compact-data-table tr:hover {
+  background: rgba(245, 196, 90, 0.1) !important;
+}
+
+/* 关键指标 */
+.key-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.metric-item {
+  background: rgba(18, 18, 18, 0.6) !important;
+  border: 1px solid rgba(245, 196, 90, 0.3) !important;
+  border-radius: 6px;
+  padding: 12px;
+  backdrop-filter: blur(4px) !important;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #b0b0b0 !important;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-gold) !important;
+  text-shadow: 0 0 6px rgba(245,196,90,0.3);
+}
+
+.metric-change {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.metric-change.positive {
+  color: #4ade80 !important;
+}
+
+.metric-change.negative {
+  color: #f87171 !important;
+}
+
+/* 安全监测 */
+.safety-monitoring {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.safety-item {
+  display: flex;
+  align-items: center;
+  background: rgba(18, 18, 18, 0.6) !important;
+  border: 1px solid rgba(245, 196, 90, 0.3) !important;
+  border-radius: 6px;
+  padding: 10px;
+  backdrop-filter: blur(4px) !important;
+}
+
+.safety-icon {
+  font-size: 20px;
+  margin-right: 12px;
+  width: 30px;
+  text-align: center;
+}
+
+.safety-info {
+  flex: 1;
+}
+
+.safety-label {
+  font-size: 12px;
+  color: #b0b0b0 !important;
+  margin-bottom: 2px;
+}
+
+.safety-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-gold) !important;
+  margin-bottom: 2px;
+}
+
+.safety-status {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.safety-status.safe {
+  background: rgba(74, 222, 128, 0.2) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+/* 环境监测 */
+.environment-data {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.env-item {
+  background: transparent !important;
+  border: 1px solid rgba(245, 196, 90, 0.3) !important;
+  border-radius: 6px;
+  padding: 10px;
+  backdrop-filter: none !important;
+}
+
+.env-label {
+  font-size: 12px;
+  color: #b0b0b0 !important;
+  margin-bottom: 4px;
+}
+
+.env-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-gold) !important;
+  margin-bottom: 6px;
+}
+
+.env-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(245, 196, 90, 0.2) !important;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.env-progress {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-2), var(--gold-1)) !important;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* 右侧纵向地图视图切换控件 */
+.map-controls {
+  position: absolute !important;
+  right: 24px !important;
+  top: 140px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  z-index: 10 !important;
+}
+
+.map-btn {
+  min-width: 120px;
+  padding: 10px 14px;
+  color: var(--text-gold) !important;
+  background: var(--dark-bg-strong) !important;
+  border: 1px solid rgba(245, 196, 90, 0.6) !important;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: all 0.2s ease;
+}
+.map-btn:hover { filter: brightness(1.1); box-shadow: 0 8px 24px rgba(245,196,90,0.25); transform: translateY(-1px); }
+.map-btn.active { background: linear-gradient(180deg, rgba(245,196,90,0.18), rgba(8,8,8,0.75)) !important; border-color: var(--gold-2) !important; }
+
+/* 右侧纵向地图工具按钮 */
+.map-tools {
+  position: absolute !important;
+  right: 24px !important;
+  top: 320px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  z-index: 10 !important;
+}
+.tool-btn { 
+  width: 42px; height: 42px; 
+  display: flex; align-items: center; justify-content: center; 
+  color: var(--text-gold) !important; 
+  background: var(--dark-bg-strong) !important; 
+  border: 1px solid rgba(245, 196, 90, 0.6) !important; 
+  border-radius: 10px; 
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35); 
+  transition: all 0.2s ease; 
+}
+.tool-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(245,196,90,0.22); filter: brightness(1.1); }
+
+/* 地图底部居中导航栏 */
+.map-bottom-nav {
+  position: fixed !important; 
+  bottom: 20px; 
+  left: 50%; 
+  transform: translateX(-50%);
+  display: flex; 
+  gap: 12px; 
+  background: transparent;
+  z-index: 10001 !important;
+  pointer-events: auto !important;
+}
+.map-bottom-nav .nav-btn {
+  padding: 10px 16px; min-width: 120px; text-align: center;
+  color: var(--text-gold);
+  background: transparent !important;
+  border: 1px solid rgba(245,196,90,0.6);
+  border-radius: 999px;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+.map-bottom-nav .nav-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 28px rgba(245,196,90,0.22); }
+.map-bottom-nav .nav-btn.active { background: linear-gradient(180deg, rgba(245,196,90,0.18), rgba(8,8,8,0.75)); border-color: var(--gold-2); }
+
+/* 隐藏原底部复杂面板 */
+.bottom-panel { display: block !important; }
+
+/* 一致的文字与数值金色化 */
+.section-title, .main-title, .chart-title, .trend-title, .table-title, .status, .equipment-name, .equipment-value, .monitor-label, .monitor-value, .alert-title, .alert-time { color: var(--text-gold) !important; }
+
+/* 地图标注金色主题 */
+.map-marker .marker-label { color: var(--text-gold) !important; text-shadow: 0 0 6px rgba(245,196,90,0.35); }
+
+/* 地图上方矿山信息板块 */
+.map-mine-info {
+    margin-bottom: 15px;
+    background: linear-gradient(180deg, #0f1419 0%, #1a1f3a 100%);
+    border: 1px solid #00d4ff;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+.mine-info-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+}
+
+.map-mine-info .mine-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.map-mine-info .detail-label {
+    color: #00d4ff;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.map-mine-info .detail-value {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* 面板过渡动画和加载状态样式 */
+.left-panel, .right-panel {
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+.panel-updating {
+    opacity: 0.7;
+    transform: scale(0.98);
+}
+
+.panel-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 14, 39, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    border-radius: 8px;
+    backdrop-filter: blur(2px);
+}
+
+.panel-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(245, 196, 90, 0.3);
+    border-top: 3px solid #F5C45A;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: #F5C45A;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 0 0 10px rgba(245, 196, 90, 0.5);
+}
+
+/* 面板内容淡入动画 */
+.panel-section {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 底部导航按钮点击反馈 */
+.nav-item.active {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+.nav-item:active {
+    transform: scale(0.95);
+}
+
+/* 数据更新时的高亮效果 */
+.data-highlight {
+    animation: dataUpdate 0.6s ease-out;
+}
+
+@keyframes dataUpdate {
+    0% {
+        background-color: rgba(245, 196, 90, 0.3);
+        transform: scale(1.02);
+    }
+    100% {
+        background-color: transparent;
+        transform: scale(1);
+    }
+}
+
+/* 面板占位符样式 */
+.panel-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    border-radius: 12px;
+    border: 2px dashed rgba(255,255,255,0.2);
+    margin: 20px;
+}
+
+.placeholder-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.7;
+    animation: placeholderPulse 2s ease-in-out infinite;
+}
+
+.placeholder-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.5;
+}
+
+@keyframes placeholderPulse {
+    0%, 100% { 
+        opacity: 0.7; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.05);
+    }
+}
+}

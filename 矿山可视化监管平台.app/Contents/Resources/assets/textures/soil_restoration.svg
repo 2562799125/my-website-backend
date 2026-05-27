@@ -1,0 +1,13 @@
+<svg width="256" height="256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="soilPattern" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#8b4513"/>
+      <circle cx="4" cy="4" r="1" fill="#a0522d"/>
+      <circle cx="12" cy="8" r="0.8" fill="#cd853f"/>
+      <circle cx="8" cy="12" r="1.2" fill="#daa520"/>
+      <rect x="2" y="14" width="3" height="1" fill="#228b22"/>
+      <rect x="10" y="2" width="2" height="1" fill="#32cd32"/>
+    </pattern>
+  </defs>
+  <rect width="256" height="256" fill="url(#soilPattern)"/>
+</svg>

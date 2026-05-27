@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>矿山生态修复智能监测与碳汇评估平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/api-setup.css">
+    <!-- Google Maps API for terrain and satellite imagery -->
+    <!-- 配置文件 -->
+    <script src="js/config.js"></script>
+    
+    <!-- API设置工具 -->
+    <script src="js/api-setup.js"></script>
+    
+    <!-- Maps调试工具 -->
+    <script src="js/debug-maps.js"></script>
+    
+    <!-- Google Maps API将通过JavaScript动态加载 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- 顶部标题栏 -->
+    <header class="main-header">
+        <div class="header-left">
+            <div class="logo">
+                <img src="assets/logo.svg" alt="圆璞提效" class="logo-svg">
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="title-container">
+                <div class="title-decoration-left"></div>
+                <h1 class="main-title">
+                    <span class="title-prefix">SMART</span>
+                    <span class="title-main">矿山生态修复智能监测与碳汇评估</span>
+                    <span class="title-suffix">平台</span>
+                    <div class="title-subtitle">Intelligent Mine Ecological Restoration Monitoring & Carbon Sink Assessment Platform</div>
+                </h1>
+                <div class="title-decoration-right"></div>
+            </div>
+            <div class="datetime">
+                <span class="datetime-label">系统时间</span>
+                <span id="current-date">2024-01-15</span>
+                <span id="current-time">17:24</span>
+                <span class="status-indicator">● ONLINE</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="weather-info">
+                <span class="weather-icon">☀</span>
+                <span class="temperature">15°C</span>
+            </div>
+            <button class="fullscreen-btn" id="fullscreen-btn" title="全屏/退出全屏">
+                <span class="fullscreen-icon">⛶</span>
+            </button>
+            <div class="user-info">
+                <span class="user-name">管理员</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 隐藏式地图切换按钮 -->
+    <div class="map-toggle-container" id="mapToggleContainer">
+        <div class="map-toggle-trigger" id="mapToggleTrigger">
+            <span class="map-toggle-icon">🗺️</span>
+        </div>
+        <div class="map-toggle-options" id="mapToggleOptions">
+            <div class="map-toggle-option active" data-mode="satellite">
+                <span class="map-toggle-option-icon">🛰️</span>
+                <span>卫星地图</span>
+            </div>
+            <div class="map-toggle-option" data-mode="standard">
+                <span class="map-toggle-option-icon">🗺️</span>
+                <span>标准地图</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <main class="main-container">
+        <!-- 左侧控制面板 -->
+        <aside class="left-panel">
+            <div class="panel-placeholder">
+                <div class="placeholder-icon">📊</div>
+                <div class="placeholder-text">请选择功能模块查看详细信息</div>
+            </div>
+        </aside>
+
+        <!-- 地图背景容器 -->
+        <div class="map-background">
+            <div id="amap-container" class="amap-container"></div>
+        </div>
+        
+        <!-- 中央内容区域 -->
+        <section class="center-panel">
+            <!-- 矿山地址信息板块 -->
+            <div class="map-mine-info">
+                <div class="mine-info-content">
+                    <div class="mine-detail">
+                        <span class="detail-label">矿山类型:</span>
+                        <span id="mine-type-map" class="detail-value">地下煤矿</span>
+                    </div>
+                    <div class="mine-detail">
+                        <span class="detail-label">地理位置:</span>
+                        <span id="mine-location-map" class="detail-value">重庆市万盛经开区</span>
+                    </div>
+                    <div class="mine-detail">
+                        <span class="detail-label">年产量:</span>
+                        <span id="mine-production-map" class="detail-value">180万吨</span>
+                    </div>
+                </div>
+            </div>
+            <div class="content-container">
+                <div class="map-overlay">
+                    <!-- 地图标注点 -->
+                    <div class="map-marker" style="left: 30%; top: 40%;">
+                        <div class="marker-dot"></div>
+                        <div class="marker-label">井下作业</div>
+                    </div>
+                    <div class="map-marker" style="left: 60%; top: 30%;">
+                        <div class="marker-dot"></div>
+                        <div class="marker-label">井下人员</div>
+                    </div>
+                    <div class="map-marker" style="left: 45%; top: 60%;">
+                        <div class="marker-dot"></div>
+                        <div class="marker-label">井下电力</div>
+                    </div>
+                </div>
+                <div class="map-bottom-nav">
+                  <button class="nav-btn" data-target="dashboard">仪表盘</button>
+                  <button class="nav-btn" data-target="monitoring">监控</button>
+                  <button class="nav-btn" data-target="safety">安全</button>
+                  <button class="nav-btn" data-target="equipment">设备</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 右侧信息面板 -->
+        <aside class="right-panel">
+            <div class="panel-placeholder">
+                <div class="placeholder-icon">📈</div>
+                <div class="placeholder-text">请选择功能模块查看数据分析</div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- 地图缩放控制按钮 - 独立于面板，始终显示 -->
+    <div class="map-zoom-controls">
+        <button id="zoom-in-btn" class="zoom-control-btn zoom-in" title="放大地图">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/>
+            </svg>
+        </button>
+        <button id="zoom-out-btn" class="zoom-control-btn zoom-out" title="缩小地图">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+                <path d="M19 13H5v-2h14v2z" fill="currentColor"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- JavaScript文件 -->
+    <script src="js/data-manager.js"></script>
+    <script src="js/amap-integration.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/monitoring.js"></script>
+    <script src="js/mine-controller.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
